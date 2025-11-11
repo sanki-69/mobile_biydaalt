@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'udirdamj_page.dart';
+import 'hicheel_file_page.dart';
 
 class CoursesPage extends StatefulWidget {
   const CoursesPage({super.key});
@@ -13,22 +15,22 @@ class _CoursesPageState extends State<CoursesPage> {
 
   // Courses per day
   final Map<int, List<Course>> _coursesPerDay = {
-    0: [ // Monday - 2 courses
+    0: [ // Monday
       Course('F.CSB349', 'Граф ба машин сургалт', 'Багш: Б. ТУЯАЦЭЦЭГ'),
       Course('F.CSB309', 'Тооцооллын хичээл', 'Багш: Н. БАТ-ЭРДЭНЭ'),
     ],
-    1: [ // Tuesday - 2 courses
+    1: [ // Tuesday
       Course('F.CSB312', 'Программчлалын үндэс', 'Багш: Д. СУХБААТАР'),
       Course('F.CSB320', 'Мэдээллийн бүтэц', 'Багш: Г. МӨНХБАТ'),
     ],
-    2: [ // Wednesday - 4 courses
+    2: [ // Wednesday
       Course('F.CSB301', 'Алгоритм', 'Багш: Б. САРУУЛ'),
       Course('F.CSB302', 'Мобайл программчлал', 'Багш: Ө. СҮХ-ОЧИР'),
       Course('F.CSB303', 'Мэдээлэл ба өгөгдөл', 'Багш: Н. ЭРДЭНЭ'),
       Course('F.CSB304', 'Сүлжээний үндэс', 'Багш: Л. БАТ'),
     ],
     3: [], // Thursday - no courses
-    4: [ // Friday - 3 courses
+    4: [ // Friday
       Course('F.CSB305', 'Вэб хөгжүүлэлт', 'Багш: Б. ТУЯАЦЭЦЭГ'),
       Course('F.CSB306', 'Мэдээллийн аюулгүй байдал', 'Багш: Н. БАТ-ЭРДЭНЭ'),
       Course('F.CSB307', 'Хиймэл оюун ухаан', 'Багш: Г. МӨНХБАТ'),
@@ -149,9 +151,10 @@ class _CoursesPageState extends State<CoursesPage> {
                     child: Text(
                       course.title,
                       style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600),
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                   IconButton(
@@ -168,12 +171,18 @@ class _CoursesPageState extends State<CoursesPage> {
                 ],
               ),
               const SizedBox(height: 8),
-              Text(course.code,
-                  style: const TextStyle(
-                      color: Colors.white70, fontWeight: FontWeight.bold)),
+              Text(
+                course.code,
+                style: const TextStyle(
+                  color: Colors.white70,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               const SizedBox(height: 4),
-              Text(course.teacher,
-                  style: const TextStyle(color: Colors.white70, fontSize: 13)),
+              Text(
+                course.teacher,
+                style: const TextStyle(color: Colors.white70, fontSize: 13),
+              ),
 
               if (isExpanded) ...[
                 const SizedBox(height: 12),
@@ -183,8 +192,8 @@ class _CoursesPageState extends State<CoursesPage> {
                     const SizedBox(width: 12),
                     _expandedButton('ХИЧ.ФАЙЛ'),
                   ],
-                )
-              ]
+                ),
+              ],
             ],
           ),
         ),
@@ -201,7 +210,19 @@ class _CoursesPageState extends State<CoursesPage> {
           padding: const EdgeInsets.symmetric(vertical: 12),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
-        onPressed: () {},
+        onPressed: () {
+          if (text == 'УДИРДАМЖ') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const UdirdamjPage()),
+            );
+          } else if (text == 'ХИЧ.ФАЙЛ') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const HicheelFilePage()),
+            );
+          }
+        },
         child: Text(
           text,
           style: const TextStyle(fontWeight: FontWeight.w600),

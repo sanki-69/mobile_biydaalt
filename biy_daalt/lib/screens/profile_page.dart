@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'student_card_page.dart';
+import 'qr_code_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -11,10 +13,10 @@ class ProfilePage extends StatelessWidget {
       backgroundColor: blueColor,
       body: Column(
         children: [
-          // Blue header with profile picture and name
+          // Profile header
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.only(top: 40, bottom: 30),
+            padding: const EdgeInsets.only(top: 60, bottom: 30),
             decoration: const BoxDecoration(
               color: blueColor,
               borderRadius: BorderRadius.only(
@@ -56,13 +58,13 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 10), // slightly less space below header
 
-          // Bigger info container filling horizontal space
+          // White information container
           Expanded(
             child: Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(30),
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 25),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(30),
@@ -77,7 +79,7 @@ class ProfilePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _infoRow('Сургүүл', 'Мэдээлэл холбооны технологийн сургүүл'),
+                  _infoRow('Сургууль', 'Мэдээлэл холбооны технологийн сургууль'),
                   _infoRow('Салбар/Тэнхим', 'КОМПЬЮТЕРИЙН УХААНЫ ТЭНХИМ'),
                   _infoRow('Хөтөлбөр', 'КОМПЬЮТЕРИЙН УХААН'),
                   _infoRow('Оюутны код', 'B22222222'),
@@ -85,55 +87,71 @@ class ProfilePage extends StatelessWidget {
                   _infoRow('Голч дүн', '4.00'),
                   _infoRow('Мэргэжлийн индекс', '0613010000002306'),
 
-                  const SizedBox(height: 20),
+                  const Spacer(),
 
-                  // Bottom buttons, mostly square with slightly rounded corners
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: blueColor,
-                            foregroundColor: Colors.white,
-                            elevation: 3,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8), // slightly rounded
+                  // Bottom buttons (moved slightly up)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 110), // <-- move buttons up
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const StudentCardPage(),
+                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: blueColor,
+                              foregroundColor: Colors.white,
+                              elevation: 4,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 16),
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                          ),
-                          child: const Text(
-                            'Оюутны үнэмлэх',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            child: const Text(
+                              'Оюутны үнэмлэх',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: blueColor,
-                            foregroundColor: Colors.white,
-                            elevation: 3,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8), // slightly rounded
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const QrCodePage(),
+                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: blueColor,
+                              foregroundColor: Colors.white,
+                              elevation: 4,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 16),
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                          ),
-                          child: const Text(
-                            'QR код',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            child: const Text(
+                              'QR код',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
           ),
-          const SizedBox(height: 20),
         ],
       ),
     );
@@ -141,12 +159,11 @@ class ProfilePage extends StatelessWidget {
 
   Widget _infoRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            width: 120,
+          Expanded(
+            flex: 3,
             child: Text(
               label,
               style: const TextStyle(
@@ -157,6 +174,7 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
           Expanded(
+            flex: 5,
             child: Text(
               value,
               style: const TextStyle(
