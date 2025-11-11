@@ -1,9 +1,14 @@
+// lib/screens/dashboard.dart
 import 'package:flutter/material.dart';
 
-// Import your screens for other pages
 import 'courses_page.dart';
 import 'finance_page.dart';
 import 'profile_page.dart';
+import 'grades_page.dart';
+import 'study_plan_page.dart';
+import 'scholarship_page.dart';
+import 'announcement_page.dart';
+
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
@@ -22,9 +27,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     Icons.settings
   ];
 
-  // Pages for other footer buttons
   final List<Widget> _pages = const [
-    SizedBox(), // Placeholder for home, because home content is inside DashboardScreen
+    SizedBox(),
     CoursesPage(),
     FinancePage(),
     ProfilePage(),
@@ -71,7 +75,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       body: Stack(
         children: [
-          // Show home content when on index 0
           _currentIndex == 0
               ? SingleChildScrollView(
                   padding: const EdgeInsets.only(bottom: 90),
@@ -104,8 +107,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             padding: const EdgeInsets.all(12),
                             child: Row(
                               children: [
-                                Expanded(
-                                  child: const Text(
+                                const Expanded(
+                                  child: Text(
                                     'text',
                                     style: TextStyle(fontSize: 14),
                                   ),
@@ -130,15 +133,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 12),
+
+                        // 🔗 Link boxes row
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            _linkItem(Icons.assessment, 'Дүнгийн\nмэдээлэл'),
-                            _linkItem(Icons.school, 'Сургалтын\nтөлөвлөгөө'),
-                            _linkItem(Icons.calendar_today, 'Тэтгэлэг'),
-                            _linkItem(Icons.announcement, 'Зарлал'),
+                            _linkItem(Icons.assessment, 'Дүнгийн мэдээлэл', const GradesPage()),
+                            _linkItem(Icons.school, 'Сургалтын төлөвлөгөө', const StudyPlanPage()),
+                            _linkItem(Icons.calendar_today, 'Тэтгэлэг', const ScholarshipPage()),
+                            _linkItem(Icons.announcement, 'Зарлал', const AnnouncementPage()),
                           ],
                         ),
+
                         const SizedBox(height: 25),
                         const Text(
                           'Энэ улиралд судалж буй хичээлүүд',
@@ -149,15 +155,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             'Багш: Б. ТУЯАЦЭЦЭГ', Colors.blue),
                         _courseWithCircles('F.CSB309', 'Тооцооллын хичээл',
                             'Багш: Н. БАТ-ЭРДЭНЭ', Colors.orange),
-                            _courseWithCircles('F.CSB349', 'Граф ба машин сургалт',
-                            'Багш: Б. ТУЯАЦЭЦЭГ', Colors.blue),
-                        _courseWithCircles('F.CSB309', 'Тооцооллын хичээл',
-                            'Багш: Н. БАТ-ЭРДЭНЭ', Colors.orange),
-                            _courseWithCircles('F.CSB349', 'Граф ба машин сургалт',
-                            'Багш: Б. ТУЯАЦЭЦЭГ', Colors.blue),
-                        _courseWithCircles('F.CSB309', 'Тооцооллын хичээл',
-                            'Багш: Н. БАТ-ЭРДЭНЭ', Colors.orange),
-                            _courseWithCircles('F.CSB349', 'Граф ба машин сургалт',
+                        _courseWithCircles('F.CSB349', 'Граф ба машин сургалт',
                             'Багш: Б. ТУЯАЦЭЦЭГ', Colors.blue),
                         _courseWithCircles('F.CSB309', 'Тооцооллын хичээл',
                             'Багш: Н. БАТ-ЭРДЭНЭ', Colors.orange),
@@ -165,9 +163,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
                 )
-              : _pages[_currentIndex], // Show other pages for other tabs
+              : _pages[_currentIndex],
 
-          // Floating Footer Navigation Bar
+          // bottom nav
           Positioned(
             left: 16,
             right: 16,
@@ -220,29 +218,49 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  // --- 🔗 Reusable Link Item ---
-  Widget _linkItem(IconData icon, String text) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.orange.shade50,
-            borderRadius: BorderRadius.circular(12),
+  // 🔗 Smaller link box widget
+  Widget _linkItem(IconData icon, String text, Widget page) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 90,
+            height: 90,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(14),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 6,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Icon(icon, color: Colors.orange, size: 22),
           ),
-          child: Icon(icon, color: Colors.orange, size: 28),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          text,
-          style: const TextStyle(fontSize: 12),
-          textAlign: TextAlign.center,
-        ),
-      ],
+          const SizedBox(height: 8),
+          SizedBox(
+            width: 90,
+            height: 36,
+            child: Text(
+              text,
+              style: const TextStyle(fontSize: 12),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  // --- 📘 Course Card with horizontal colored circles outside ---
+  // 📘 course cards
   Widget _courseWithCircles(
       String code, String title, String teacher, Color color) {
     return Padding(
