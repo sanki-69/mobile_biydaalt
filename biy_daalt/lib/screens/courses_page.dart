@@ -11,41 +11,67 @@ class CoursesPage extends StatefulWidget {
 
 class _CoursesPageState extends State<CoursesPage> {
   int _selectedDayIndex = 0;
-  final List<String> weekdays = ['Дав', 'Мяг', 'Лха', 'Пүр', 'Баа', 'Бям', 'Ням'];
+  final List<String> weekdays = [
+    'Дав',
+    'Мяг',
+    'Лха',
+    'Пүр',
+    'Баа',
+    'Бям',
+    'Ням',
+  ];
 
-  // Courses per day
   final Map<int, List<Course>> _coursesPerDay = {
-    0: [ // Monday
-      Course('F.CSB349', 'Граф ба машин сургалт', 'Багш: Б. ТУЯАЦЭЦЭГ'),
-      Course('F.CSB309', 'Тооцооллын хичээл', 'Багш: Н. БАТ-ЭРДЭНЭ'),
+    0: [
+      Course(
+        'F.CSB349',
+        'Граф ба машин сургалт',
+        'Б. ТУЯАЦЭЦЭГ',
+        '1-1',
+        'VI-229',
+      ),
+      Course('F.CSB309', 'Тооцооллын хичээл', 'Н. БАТ-ЭРДЭНЭ', '2-1', 'VI-230'),
     ],
-    1: [ // Tuesday
-      Course('F.CSB312', 'Программчлалын үндэс', 'Багш: Д. СУХБААТАР'),
-      Course('F.CSB320', 'Мэдээллийн бүтэц', 'Багш: Г. МӨНХБАТ'),
+    1: [
+      Course(
+        'F.CSB312',
+        'Программчлалын үндэс',
+        'Д. СУХБААТАР',
+        '1-1',
+        'VI-201',
+      ),
+      Course('F.CSB320', 'Мэдээллийн бүтэц', 'Г. МӨНХБАТ', '2-1', 'VI-202'),
     ],
-    2: [ // Wednesday
-      Course('F.CSB301', 'Алгоритм', 'Багш: Б. САРУУЛ'),
-      Course('F.CSB302', 'Мобайл программчлал', 'Багш: Ө. СҮХ-ОЧИР'),
-      Course('F.CSB303', 'Мэдээлэл ба өгөгдөл', 'Багш: Н. ЭРДЭНЭ'),
-      Course('F.CSB304', 'Сүлжээний үндэс', 'Багш: Л. БАТ'),
+    2: [
+      Course('F.CSB301', 'Алгоритм', 'Б. САРУУЛ', '1-1', 'VI-203'),
+      Course('F.CSB302', 'Мобайл программчлал', 'Ө. СҮХ-ОЧИР', '2-1', 'VI-204'),
+      Course('F.CSB303', 'Мэдээлэл ба өгөгдөл', 'Н. ЭРДЭНЭ', '3-1', 'VI-205'),
+      Course('F.CSB304', 'Сүлжээний үндэс', 'Л. БАТ', '4-1', 'VI-206'),
     ],
-    3: [], // Thursday - no courses
-    4: [ // Friday
-      Course('F.CSB305', 'Вэб хөгжүүлэлт', 'Багш: Б. ТУЯАЦЭЦЭГ'),
-      Course('F.CSB306', 'Мэдээллийн аюулгүй байдал', 'Багш: Н. БАТ-ЭРДЭНЭ'),
-      Course('F.CSB307', 'Хиймэл оюун ухаан', 'Багш: Г. МӨНХБАТ'),
+    3: [],
+    4: [
+      Course('F.CSB305', 'Вэб хөгжүүлэлт', 'Б. ТУЯАЦЭЦЭГ', '1-1', 'VI-207'),
+      Course(
+        'F.CSB306',
+        'Мэдээллийн аюулгүй байдал',
+        'Н. БАТ-ЭРДЭНЭ',
+        '2-1',
+        'VI-208',
+      ),
+      Course('F.CSB307', 'Хиймэл оюун ухаан', 'Г. МӨНХБАТ', '3-1', 'VI-209'),
     ],
   };
 
-  // Track expanded state for each course dynamically
   final Map<int, List<bool>> _expandedPerDay = {};
 
   @override
   void initState() {
     super.initState();
-    // Initialize expanded states for each day
     for (var day in _coursesPerDay.keys) {
-      _expandedPerDay[day] = List.generate(_coursesPerDay[day]!.length, (_) => false);
+      _expandedPerDay[day] = List.generate(
+        _coursesPerDay[day]!.length,
+        (_) => false,
+      );
     }
   }
 
@@ -72,7 +98,6 @@ class _CoursesPageState extends State<CoursesPage> {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         children: [
-          // Weekday Selector
           Row(
             children: List.generate(weekdays.length, (index) {
               final isSelected = index == _selectedDayIndex;
@@ -88,7 +113,9 @@ class _CoursesPageState extends State<CoursesPage> {
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: isSelected ? Colors.blue : Colors.orange,
+                      color: isSelected
+                          ? const Color(0xFF2355C4)
+                          : const Color(0xFFF49D02),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
@@ -105,7 +132,6 @@ class _CoursesPageState extends State<CoursesPage> {
           ),
           const SizedBox(height: 20),
 
-          // Courses
           if (coursesToday.isEmpty)
             const Center(
               child: Padding(
@@ -120,11 +146,17 @@ class _CoursesPageState extends State<CoursesPage> {
             ...List.generate(coursesToday.length, (i) {
               final course = coursesToday[i];
               final isExpanded = expandedToday[i];
+              final courseColor = i % 2 == 0
+                  ? const Color(0xFF2355C4)
+                  : const Color(0xFFF49D02);
 
-              // Alternate color between blue and orange
-              final courseColor = i % 2 == 0 ? Colors.blue : Colors.orange;
-
-              return _courseCard(_selectedDayIndex, i, course, isExpanded, courseColor);
+              return _courseCard(
+                _selectedDayIndex,
+                i,
+                course,
+                isExpanded,
+                courseColor,
+              );
             }),
 
           const SizedBox(height: 100),
@@ -133,33 +165,65 @@ class _CoursesPageState extends State<CoursesPage> {
     );
   }
 
-  Widget _courseCard(int dayIndex, int index, Course course, bool isExpanded, Color color) {
+  Widget _courseCard(
+    int dayIndex,
+    int index,
+    Course course,
+    bool isExpanded,
+    Color color,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Card(
         color: color,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Top row: title + arrow
+              // Top row: time/location + arrow
               Row(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start, // arrow aligned with top text
                 children: [
                   Expanded(
-                    child: Text(
-                      course.title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Цаг: ${course.time}  Байрлал: ${course.location}',
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 12, // updated font size
+                          ),
+                        ),
+                        const SizedBox(height: 17),
+                        Text(
+                          '${course.title} /${course.code}/',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12, // updated font size
+                          ),
+                        ),
+                        const SizedBox(height: 17),
+                        Text(
+                          course.teacher.toUpperCase(),
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12, // updated font size
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   IconButton(
                     icon: Icon(
-                      isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                      isExpanded
+                          ? Icons.keyboard_arrow_up
+                          : Icons.keyboard_arrow_down,
                       color: Colors.white,
                     ),
                     onPressed: () {
@@ -170,27 +234,14 @@ class _CoursesPageState extends State<CoursesPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
-              Text(
-                course.code,
-                style: const TextStyle(
-                  color: Colors.white70,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                course.teacher,
-                style: const TextStyle(color: Colors.white70, fontSize: 13),
-              ),
 
               if (isExpanded) ...[
                 const SizedBox(height: 12),
                 Row(
                   children: [
-                    _expandedButton('УДИРДАМЖ'),
+                    _expandedButton('УДИРДАМЖ', course: course),
                     const SizedBox(width: 12),
-                    _expandedButton('ХИЧ.ФАЙЛ'),
+                    _expandedButton('ХИЧ.ФАЙЛ', course: course),
                   ],
                 ),
               ],
@@ -201,15 +252,17 @@ class _CoursesPageState extends State<CoursesPage> {
     );
   }
 
-  Widget _expandedButton(String text) {
+  Widget _expandedButton(String text, {required Course course}) {
     return Expanded(
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
-          foregroundColor: Colors.blue,
+          foregroundColor: const Color(0xFF2355C4),
           padding: const EdgeInsets.symmetric(vertical: 12),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ).copyWith(overlayColor: MaterialStateProperty.all(Colors.transparent)),
         onPressed: () {
           if (text == 'УДИРДАМЖ') {
             Navigator.push(
@@ -219,14 +272,16 @@ class _CoursesPageState extends State<CoursesPage> {
           } else if (text == 'ХИЧ.ФАЙЛ') {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const HicheelFilePage()),
+              MaterialPageRoute(
+                builder: (context) => HicheeliinFilePage(
+                  courseCode: course.code,
+                  courseTitle: course.title,
+                ),
+              ),
             );
           }
         },
-        child: Text(
-          text,
-          style: const TextStyle(fontWeight: FontWeight.w600),
-        ),
+        child: Text(text, style: const TextStyle(fontWeight: FontWeight.w600)),
       ),
     );
   }
@@ -236,6 +291,8 @@ class Course {
   final String code;
   final String title;
   final String teacher;
+  final String time;
+  final String location;
 
-  Course(this.code, this.title, this.teacher);
+  Course(this.code, this.title, this.teacher, this.time, this.location);
 }

@@ -6,7 +6,7 @@ class InputField extends StatelessWidget {
   final IconData? suffixIcon;
   final bool obscureText;
 
-  const InputField({
+  const InputField({super.key, 
     required this.label,
     this.suffixText,
     this.suffixIcon,

@@ -1,64 +1,97 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
-class QrCodePage extends StatelessWidget {
+class QrCodePage extends StatefulWidget {
   const QrCodePage({super.key});
+
+  @override
+  State<QrCodePage> createState() => _QrCodePageState();
+}
+
+class _QrCodePageState extends State<QrCodePage> {
+  late String qrData;
+
+  @override
+  void initState() {
+    super.initState();
+    qrData = _generateRandomString(10);
+  }
+
+  // Generate a random alphanumeric string
+  static String _generateRandomString(int length) {
+    const chars =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    final rnd = Random();
+    return String.fromCharCodes(
+      Iterable.generate(
+        length,
+        (_) => chars.codeUnitAt(rnd.nextInt(chars.length)),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFF3F51B5),
+        foregroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'QR КОД',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-        ),
+        title: const Text('QR КОД', style: TextStyle(fontSize: 15)),
         centerTitle: true,
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // ✅ Load your QR image from assets folder
+            const SizedBox(height: 60),
+            const Text(
+              'Ирмүүн Хангал',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black87,
+                letterSpacing: 1.2,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Мэдээлэл, холбооны технологийн сургууль',
+              style: TextStyle(fontSize: 16, color: Colors.black87),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 30),
+            const Text(
+              'B22222222',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black87,
+                letterSpacing: 2,
+              ),
+            ),
+
+            const SizedBox(height: 40),
             Container(
-              width: 230,
-              height: 230,
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
                   ),
                 ],
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image.asset(
-                  'assets/qr_code.png', // ← change filename to your actual QR image
-                  fit: BoxFit.cover,
-                ),
-              ),
+              child: QrImageView(data: qrData, size: 240, gapless: false),
             ),
-            const SizedBox(height: 20),
-            const Text(
-              'B22222222 — Ирмүүн Хангал',
-              style: TextStyle(
-                color: Colors.black87,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            const Spacer(),
           ],
         ),
       ),

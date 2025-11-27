@@ -24,7 +24,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     Icons.home,
     Icons.school,
     Icons.account_balance_wallet,
-    Icons.settings
+    Icons.settings,
   ];
 
   final List<Widget> _pages = const [
@@ -54,9 +54,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Text(
                     'Эрдэнэ Т. ТҮВШИНСАНАА',
                     style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               )
@@ -79,7 +80,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ? SingleChildScrollView(
                   padding: const EdgeInsets.only(bottom: 90),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -96,12 +100,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         const SizedBox(height: 16),
                         const Text(
                           'Мэдээ, мэдээлэл',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: 10),
                         Card(
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16)),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
                           elevation: 2,
                           child: Padding(
                             padding: const EdgeInsets.all(12),
@@ -130,7 +138,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         const SizedBox(height: 20),
                         const Text(
                           'Чухал холбоос',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: 12),
 
@@ -138,27 +149,62 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            _linkItem(Icons.assessment, 'Дүнгийн мэдээлэл', const GradesPage()),
-                            _linkItem(Icons.school, 'Сургалтын төлөвлөгөө', const StudyPlanPage()),
-                            _linkItem(Icons.calendar_today, 'Тэтгэлэг', const ScholarshipPage()),
-                            _linkItem(Icons.announcement, 'Зарлал', const AnnouncementPage()),
+                            _linkItem(
+                              Icons.assessment,
+                              'Дүнгийн мэдээлэл',
+                              const GradesPage(),
+                            ),
+                            _linkItem(
+                              Icons.school,
+                              'Сургалтын төлөвлөгөө',
+                              const StudyPlanPage(),
+                            ),
+                            _linkItem(
+                              Icons.calendar_today,
+                              'Тэтгэлэг',
+                              const ScholarshipPage(),
+                            ),
+                            _linkItem(
+                              Icons.announcement,
+                              'Зарлал',
+                              const AnnouncementPage(),
+                            ),
                           ],
                         ),
 
                         const SizedBox(height: 25),
                         const Text(
                           'Энэ улиралд судалж буй хичээлүүд',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: 10),
-                        _courseWithCircles('F.CSB349', 'Граф ба машин сургалт',
-                            'Багш: Б. ТУЯАЦЭЦЭГ', Colors.blue),
-                        _courseWithCircles('F.CSB309', 'Тооцооллын хичээл',
-                            'Багш: Н. БАТ-ЭРДЭНЭ', Colors.orange),
-                        _courseWithCircles('F.CSB349', 'Граф ба машин сургалт',
-                            'Багш: Б. ТУЯАЦЭЦЭГ', Colors.blue),
-                        _courseWithCircles('F.CSB309', 'Тооцооллын хичээл',
-                            'Багш: Н. БАТ-ЭРДЭНЭ', Colors.orange),
+                        _courseWithCircles(
+                          'F.CSB349',
+                          'Граф ба машин сургалт',
+                          'Багш: Б. ТУЯАЦЭЦЭГ',
+                          const Color(0xFF2355C4),
+                        ),
+                        _courseWithCircles(
+                          'F.CSB309',
+                          'Тооцооллын хичээл',
+                          'Багш: Н. БАТ-ЭРДЭНЭ',
+                          const Color(0xFFF49D02),
+                        ),
+                        _courseWithCircles(
+                          'F.CSB349',
+                          'Граф ба машин сургалт',
+                          'Багш: Б. ТУЯАЦЭЦЭГ',
+                          const Color(0xFF2355C4),
+                        ),
+                        _courseWithCircles(
+                          'F.CSB309',
+                          'Тооцооллын хичээл',
+                          'Багш: Н. БАТ-ЭРДЭНЭ',
+                          const Color(0xFFF49D02),
+                        ),
                       ],
                     ),
                   ),
@@ -180,7 +226,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     color: Colors.black12,
                     blurRadius: 10,
                     offset: Offset(0, 4),
-                  )
+                  ),
                 ],
               ),
               child: Row(
@@ -197,15 +243,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       children: [
                         Icon(
                           _icons[index],
-                          color: _currentIndex == index ? Colors.blue : Colors.grey,
+                          color: _currentIndex == index
+                              ? const Color(0xFF2355C4)
+                              : Colors.grey,
                         ),
                         const SizedBox(height: 4),
                         Text(
                           _labels[index],
                           style: TextStyle(
-                              color: _currentIndex == index ? Colors.blue : Colors.grey,
-                              fontSize: 12),
-                        )
+                            color: _currentIndex == index
+                                ? const Color(0xFF2355C4)
+                                : Colors.grey,
+                            fontSize: 12,
+                          ),
+                        ),
                       ],
                     ),
                   );
@@ -217,7 +268,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
- 
+
   // 🔗 Smaller link box widget
   Widget _linkItem(IconData icon, String text, Widget page) {
     return GestureDetector(
@@ -241,7 +292,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ],
             ),
-            child: Icon(icon, color: Colors.orange, size: 22),
+            child: Icon(icon, color: const Color(0xFFF49D02), size: 22),
           ),
           const SizedBox(height: 8),
           SizedBox(
@@ -262,7 +313,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   // 📘 course cards
   Widget _courseWithCircles(
-      String code, String title, String teacher, Color color) {
+    String code,
+    String title,
+    String teacher,
+    Color color,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -273,10 +328,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Container(
                 width: 10,
                 height: 10,
-                decoration: BoxDecoration(
-                  color: color,
-                  shape: BoxShape.circle,
-                ),
+                decoration: BoxDecoration(color: color, shape: BoxShape.circle),
               ),
               const SizedBox(width: 8),
               Container(
@@ -295,7 +347,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: Card(
               color: color,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
+                borderRadius: BorderRadius.circular(16),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
@@ -320,7 +373,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     const SizedBox(height: 4),
                     Text(
                       teacher,
-                      style: const TextStyle(color: Colors.white70, fontSize: 13),
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 13,
+                      ),
                     ),
                   ],
                 ),

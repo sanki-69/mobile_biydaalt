@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const Color blueLine = Color(0xFF3F51B5);
+
 class GradesPage extends StatelessWidget {
   const GradesPage({super.key});
 
@@ -8,143 +10,349 @@ class GradesPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
+        leading: const BackButton(color: Colors.white),
         title: const Text(
           'ДҮНГИЙН МЭДЭЭЛЭЛ',
           style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontWeight: FontWeight.normal,
             fontSize: 18,
           ),
         ),
-        centerTitle: true,
+        backgroundColor: blueLine,
+        elevation: 0,
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: const [
-          _GradeCard(
-            title: "2024-2025 оны намрын улирлын дүнгийн хуудас",
-            dateStart: "2025-04-23",
-            dateEnd: "2025-08-13",
-          ),
-          SizedBox(height: 16),
-          _GradeCard(
-            title: "2024-2025 оны хаврын улирлын дүнгийн хуудас",
-            dateStart: "2025-01-06",
-            dateEnd: "2025-01-14",
-            isLongTitle: true,
-          ),
-          SizedBox(height: 16),
-          _GradeCard(
-            title: "2024-2025 оны зуны улирлын дүнгийн хуудас",
-            dateStart: "2024-12-09",
-            dateEnd: "2024-12-31",
-          ),
-          SizedBox(height: 16),
-          _GradeCard(
-            title: "2024-2025 оны хичээлийн жилийн дүнгийн тайлан",
-            dateStart: "2024-08-23",
-            dateEnd: "2024-08-31",
-            isLongTitle: true,
-          ),
-          SizedBox(height: 16),
-          _GradeCard(
-            title: "2024-2025 оны улирлын төгсөх хичээлийн дүнгийн тайлан",
-            dateStart: "2024-05-10",
-            dateEnd: "2024-06-10",
-            isLongTitle: true,
-          ),
-        ],
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildSemesterSection(
+              "2022-2023 оны хичээлийн жил, 1-р улирал",
+              semester1Courses,
+            ),
+            const SizedBox(height: 16),
+            _buildSemesterSection(
+              "2022-2023 оны хичээлийн жил, 2-р улирал",
+              semester2Courses,
+            ),
+            const SizedBox(height: 16),
+            _buildSemesterSection(
+              "2023-2024 оны хичээлийн жил, 1-р улирал",
+              semester3Courses, // updated list used here
+            ),
+          ],
+        ),
       ),
     );
   }
-}
 
-class _GradeCard extends StatelessWidget {
-  final String title;
-  final String dateStart;
-  final String dateEnd;
-  final bool isLongTitle;
-
-  const _GradeCard({
-    required this.title,
-    required this.dateStart,
-    required this.dateEnd,
-    this.isLongTitle = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1976D2), // deep blue
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 6,
-            offset: Offset(0, 3),
+  Widget _buildSemesterSection(
+    String title,
+    List<Map<String, String>> courses,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.normal,
+            color: Colors.black87,
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              color: isLongTitle ? Colors.white70 : Colors.white,
-              fontSize: isLongTitle ? 13.5 : 15,
-              fontWeight: FontWeight.w500,
-              height: 1.3,
-            ),
+        ),
+        const SizedBox(height: 4),
+        _buildCourseTable(courses),
+      ],
+    );
+  }
+
+  Widget _buildCourseTable(List<Map<String, String>> courses) {
+    // Calculate total credit
+    final totalCredit = courses.fold<double>(
+      0,
+      (sum, c) => sum + double.parse(c['credit']!),
+    );
+
+    return Table(
+      columnWidths: const {
+        0: FlexColumnWidth(1.5), // Course code
+        1: FlexColumnWidth(2.5), // Course name
+        2: FlexColumnWidth(1), // Credit
+        3: FlexColumnWidth(1), // Midterm
+        4: FlexColumnWidth(1), // Final
+        5: FlexColumnWidth(1), // Total
+        6: FlexColumnWidth(1), // Letter
+      },
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      children: [
+        // Header row
+        TableRow(
+          children: [
+            _header('Хич.код'),
+            _header('Хич.Нэр', allowWrap: true),
+            _header('Кредит'),
+            _header('Б.Оноо'),
+            _header('Ш.Оноо'),
+            _header('Оноо'),
+            _header('Үс.Үнэлгээ', allowWrap: true),
+          ],
+        ),
+        // Blue line under header
+        TableRow(
+          children: List.generate(
+            7,
+            (_) => Container(height: 1, color: blueLine),
           ),
-          const SizedBox(height: 12),
-          Row(
+        ),
+        // Data rows
+        for (var c in courses) ...[
+          TableRow(
             children: [
-              Text(
-                dateStart,
-                style: const TextStyle(color: Colors.white70, fontSize: 13),
-              ),
-              const SizedBox(width: 12),
-              const Icon(Icons.arrow_forward, color: Colors.white70, size: 16),
-              const SizedBox(width: 12),
-              Text(
-                dateEnd,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold),
-              ),
-              const Spacer(),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: const Color(0xFF1976D2),
-                  elevation: 0,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                child: const Text(
-                  'Харах',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-                ),
-              ),
+              _cell(c['code']!, textAlign: TextAlign.center),
+              _cell(c['name']!, textAlign: TextAlign.center, allowWrap: true),
+              _cell(c['credit']!, textAlign: TextAlign.center),
+              _cell(c['midterm']!, textAlign: TextAlign.center),
+              _cell(c['final']!, textAlign: TextAlign.center),
+              _cell(c['total']!, textAlign: TextAlign.center),
+              _cell(c['letter']!, textAlign: TextAlign.center, allowWrap: true),
             ],
           ),
+          // Blue separator line after each course
+          TableRow(
+            children: List.generate(
+              7,
+              (_) => Container(height: 1, color: blueLine),
+            ),
+          ),
         ],
+        // Total credit row
+        TableRow(
+          children: [
+            _cell(''), // Course code empty
+            _cell('Нийт кредит', textAlign: TextAlign.center),
+            _cell(totalCredit.toStringAsFixed(1), textAlign: TextAlign.center),
+            _cell(''),
+            _cell(''),
+            _cell(''),
+            _cell(''),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _header(String text, {bool allowWrap = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: const TextStyle(fontSize: 7.5, fontWeight: FontWeight.normal),
+        softWrap: allowWrap,
+        overflow: allowWrap ? TextOverflow.visible : TextOverflow.ellipsis,
+      ),
+    );
+  }
+
+  Widget _cell(
+    String text, {
+    TextAlign textAlign = TextAlign.left,
+    bool allowWrap = false,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+      child: Text(
+        text,
+        textAlign: textAlign,
+        style: const TextStyle(fontSize: 7.5, fontWeight: FontWeight.normal),
+        softWrap: allowWrap,
+        overflow: allowWrap ? TextOverflow.visible : TextOverflow.ellipsis,
       ),
     );
   }
 }
+
+// ==================== DATA ====================
+
+final List<Map<String, String>> semester1Courses = [
+  {
+    "code": "S.CEM101",
+    "name": "Харилцааны англи хэл",
+    "credit": "3.0",
+    "midterm": "93.24",
+    "final": "0.0",
+    "total": "93.24",
+    "letter": "A-",
+  },
+  {
+    "code": "S.CFM100",
+    "name": "Програмчлалын үндэс",
+    "credit": "3.0",
+    "midterm": "70.0",
+    "final": "25.0",
+    "total": "95.0",
+    "letter": "A-",
+  },
+  {
+    "code": "F.CSB101",
+    "name": "Мэргэжлийн үдиртгал",
+    "credit": "2.0",
+    "midterm": "96.0",
+    "final": "0.0",
+    "total": "96.0",
+    "letter": "A",
+  },
+  {
+    "code": "S.MHM101",
+    "name": "Монголын түүх",
+    "credit": "3.0",
+    "midterm": "70.0",
+    "final": "30.0",
+    "total": "100.0",
+    "letter": "A",
+  },
+  {
+    "code": "S.MLM101",
+    "name": "Хэл ярианы соёл",
+    "credit": "3.0",
+    "midterm": "69.0",
+    "final": "30.0",
+    "total": "99.0",
+    "letter": "A",
+  },
+  {
+    "code": "S.MTM121",
+    "name": "Математик 1B",
+    "credit": "3.0",
+    "midterm": "68.0",
+    "final": "30.0",
+    "total": "98.0",
+    "letter": "A",
+  },
+  {
+    "code": "S.PHM101",
+    "name": "Физик I",
+    "credit": "3.0",
+    "midterm": "64.0",
+    "final": "25.0",
+    "total": "89.0",
+    "letter": "B+",
+  },
+  {
+    "code": "F.CSM100",
+    "name": "Алгоритмын үндэс",
+    "credit": "3.0",
+    "midterm": "70.0",
+    "final": "30.0",
+    "total": "100.0",
+    "letter": "A",
+  },
+];
+
+final List<Map<String, String>> semester2Courses = [
+  {
+    "code": "S.CDM101",
+    "name": "Гамшгаас хамгаалах менежмент",
+    "credit": "1.0",
+    "midterm": "68.0",
+    "final": "29.0",
+    "total": "97.0",
+    "letter": "A",
+  },
+  {
+    "code": "S.MTM122",
+    "name": "Математик 2B",
+    "credit": "3.0",
+    "midterm": "65.0",
+    "final": "28.0",
+    "total": "93.0",
+    "letter": "A-",
+  },
+  {
+    "code": "S.PTM101",
+    "name": "Биеийн тамир",
+    "credit": "2.0",
+    "midterm": "68.0",
+    "final": "27.0",
+    "total": "95.0",
+    "letter": "A-",
+  },
+  {
+    "code": "F.CSM202",
+    "name": "Объект хандлагат программчлал",
+    "credit": "3.0",
+    "midterm": "62.0",
+    "final": "30.0",
+    "total": "92.0",
+    "letter": "A-",
+  },
+  {
+    "code": "F.EEM200",
+    "name": "Цахилгаан ба электрон техникийн үндэс",
+    "credit": "3.0",
+    "midterm": "64.0",
+    "final": "27.0",
+    "total": "91.0",
+    "letter": "A-",
+  },
+];
+
+final List<Map<String, String>> semester3Courses = [
+  {
+    "code": "S.EEM101",
+    "name": "Инженерчлэлийн эдийн засаг",
+    "credit": "3.0",
+    "midterm": "68.0",
+    "final": "14.0",
+    "total": "82.0",
+    "letter": "B-",
+  },
+  {
+    "code": "F.CSB200",
+    "name": "Компьютерийн ухааны үндэс",
+    "credit": "3.0",
+    "midterm": "70.0",
+    "final": "30.0",
+    "total": "100.0",
+    "letter": "A",
+  },
+  {
+    "code": "F.CSM200",
+    "name": "Хиймэл оюун ухааны үндэс",
+    "credit": "3.0",
+    "midterm": "63.0",
+    "final": "30.0",
+    "total": "93.0",
+    "letter": "A-",
+  },
+  {
+    "code": "F.CSB203",
+    "name": "Өгөгдлийн бүтэц ба алгоритм",
+    "credit": "3.0",
+    "midterm": "70.0",
+    "final": "27.0",
+    "total": "97.0",
+    "letter": "A",
+  },
+  {
+    "code": "S.PSM201",
+    "name": "Магадлалын онол ба математик статистик",
+    "credit": "3.0",
+    "midterm": "69.0",
+    "final": "26.0",
+    "total": "95.0",
+    "letter": "A-",
+  },
+  {
+    "code": "F.ITM202",
+    "name": "Веб зохиомж",
+    "credit": "3.0",
+    "midterm": "69.0",
+    "final": "28.0",
+    "total": "97.0",
+    "letter": "A",
+  },
+];
